@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Homepage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between; /* Align items to the sides */
+            align-items: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex; /* Align items horizontally */
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 120px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            color: black;
+            margin-top: 20px; /* Adjust the margin to position the dropdown */
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .logout-button {
+            cursor: pointer;
+        }
+
+        .logoutButton a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logoutButton a:hover {
+            text-decoration: underline;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/user-homepage">Home</a></li>
+                <li><a href="/team-members">Team Members</a></li>
+                <li><a href="/faculty-advisor">Faculty Advisor</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn" onclick="toggleProfileDropdown()">Profile</a>
+                    <div id="profileDropdown" class="dropdown-content">
+                        <a href="/profile/view-profile">View Profile</a>
+                        <a href="/profile/edit-profile">Edit Profile</a>
+                        <a href="/profile/delete-profile">Delete Profile</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <div class="logoutButton"><a id="logoutButton" href="#">Logout</a></div>
+    </header>
+    <div id="popup" class="popup" style="display: none;">
+        Logging off in <span id="countdown">5</span> seconds...
+    </div>
+    <script>
+        function toggleProfileDropdown() {
+            var profileDropdown = document.getElementById('profileDropdown');          
+            profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the logout button element
+            const logoutButton = document.getElementById('logoutButton');
+
+            // Add click event listener to the logout button
+            logoutButton.addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent default link behavior
+
+                // Show the popup
+                document.getElementById('popup').style.display = 'block';
+
+                // Set initial countdown value
+                let countdown = 5;
+
+                // Update countdown and redirect after 5 seconds
+                const interval = setInterval(function () {
+                    countdown--;
+                    document.getElementById('countdown').textContent = countdown;
+                    if (countdown <= 0) {
+                        clearInterval(interval);
+                        window.location.href = '/logout'; // Redirect to logout URL
+                    }
+                }, 1000); // Update every second
+            });
+
+            // Detect browser back button press
+            window.onpopstate = function(event) {
+                if (event.state && event.state.loggedout) {
+                    // Show the popup if the user came back after logging out
+                    document.getElementById('popup').style.display = 'block';
+                }
+            };
+        });
+
+        // Disable browser's back button after successful login
+        window.onload = function () {
+            if (window.history && window.history.pushState) {
+                window.history.pushState({ loggedout: true }, null, './#forward');
+            }
+        }
+    </script>
+</body>
+</html>

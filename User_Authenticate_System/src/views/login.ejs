@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            width: 300px;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center items horizontally */
+            position: relative; /* Make container position relative for absolute positioning of eye icon */
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        form {
+            margin-top: 20px;
+            width: 100%; /* Take full width of the container */
+        }
+
+        label, input {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        #togglePassword {
+            position: absolute;
+            top: 70%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        button[type="submit"], .signup-button{
+            width: calc(50% - 5px); /* Set width for both elements */
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 10px;
+            box-sizing: border-box; /* Include padding and border in the width calculation */
+            text-align: center; /* Center text */
+            text-decoration: none; /* Remove underline */
+            display: inline-block; /* Ensure proper centering */
+        }
+
+        button[type="submit"]:hover, .signup-button:hover {
+            background-color: #0056b3;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between; /* Add space between the buttons */
+            width: 100%; /* Ensure full width */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Login</h1>
+        <form action="/login" method="POST">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="off" required value="<%= email || '' %>">
+            <div class="password-container">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" autocomplete="off" required value="<%= password || '' %>">
+                <i class="far fa-eye" id="togglePassword"></i>
+            </div>
+            <% if (errorMessage) { %>
+                <p class="errorMessage"><%= errorMessage %></p>
+            <% } %>
+            <div class="button-container"> <!-- Container for buttons -->
+                <button type="submit">Login</button>
+                <a href="/register" class="signup-button">Signup/Register</a>
+            </div>
+        </form>
+        <p>Forgot your password? <a href="/forgot-password">Reset it here</a></p>
+    </div>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('togglePassword');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('far', 'fa-eye');
+                eyeIcon.classList.add('fas', 'fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fas', 'fa-eye-slash');
+                eyeIcon.classList.add('far', 'fa-eye');
+            }
+        });
+    </script>
+</body>
+</html>
